@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Utilities;
 using WgMod.Common.Players;
+using WgMod.Content.Dusts;
 
 namespace WgMod.Content.NPCs.Caverns;
 
@@ -68,6 +69,16 @@ public class SweetSpirit : ModNPC
         if (Main.hardMode)
             return 0f;
         return SpawnCondition.Cavern.Chance * 0.02f;
+    }
+
+    public override void HitEffect(NPC.HitInfo hit)
+    {
+        if (Main.netMode != NetmodeID.Server || NPC.life <= 0)
+            for (int i = 0; i < 15; i++)
+            {
+                Dust chunks = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<SweetSpiritplasm>(), NPC.velocity.X, NPC.velocity.Y, default, default, 1);
+                chunks.noGravity = true;
+            }
     }
 
     public override void DrawBehind(int index)
