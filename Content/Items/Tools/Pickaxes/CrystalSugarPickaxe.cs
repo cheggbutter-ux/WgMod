@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -13,7 +15,7 @@ using WgMod.Content.Items.Ammo;
 namespace WgMod.Content.Items.Tools.Pickaxes;
 
 [Credit(ProjectRole.Programmer, Contributor.maimaichubs)]
-[Credit(ProjectRole.Artist, Contributor.PLACEHOLDER)]
+[Credit(ProjectRole.Artist, Contributor.sinnerdrip)]
 public class CrystalSugarPickaxe : ModItem
 {
 	WgStat _damage = new(1f, 1.05f);
@@ -26,8 +28,8 @@ public class CrystalSugarPickaxe : ModItem
 	{
 		Item.damage = 15;
 		Item.DamageType = DamageClass.Melee;
-		Item.width = 40;
-		Item.height = 40;
+		Item.width = 42;
+		Item.height = 42;
 		Item.useTime = 12;
 		Item.useAnimation = 25;
 		Item.useStyle = ItemUseStyleID.Swing;
@@ -113,5 +115,25 @@ public class CrystalSugarPickaxe : ModItem
 			.AddIngredient<PowderedSugar>(15)
 			.AddTile(TileID.MythrilAnvil)
 			.Register();
+	}
+
+	public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+	{
+		Texture2D pickat;
+		Rectangle beh = new(0, 0, 42, 42);
+
+		if (_growth)
+			pickat = ModContent.Request<Texture2D>("WgMod/Content/Items/Tools/Pickaxes/CrystalSugarPickaxe_Growth").Value;
+		else
+			pickat = ModContent.Request<Texture2D>("WgMod/Content/Items/Tools/Pickaxes/CrystalSugarPickaxe").Value;
+
+		spriteBatch.Draw(pickat, position - Main.screenPosition, beh, drawColor, default, origin, scale, SpriteEffects.None, 0f);
+
+		return false;
+	}
+
+	public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+	{
+		return false;
 	}
 }
