@@ -1119,6 +1119,11 @@ Items: {
 		DisplayName: Honey Hammer
 		Tooltip: ""
 	}
+
+	ImpScepter: {
+		DisplayName: Imp Scepter
+		Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -1303,6 +1308,11 @@ Buffs: {
 		DisplayName: Crystal Sugar Frenzy
 		Description: Increases mining speed by {0}%
 	}
+
+	IndulgentImpBuff: {
+		DisplayName: Indulgent Imp Buff
+		Description: Mods.WgMod.Buffs.IndulgentImpBuff.Description
+	}
 }
 
 Configs: {
@@ -1472,6 +1482,7 @@ Projectiles: {
 	HeartyHeart_Surround_Strong.DisplayName: Hearty Heart
 	HeartyHeart_Direct_Spawner_Strong.DisplayName: Hearty Heart Hearter
 	StrawProjectile.DisplayName: Straw Projectile
+	IndulgentImp.DisplayName: Indulgent Imp
 }
 
 NPCs: {
