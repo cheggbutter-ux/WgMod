@@ -1,6 +1,7 @@
-
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -33,6 +34,9 @@ public class IndulgentImp : ModProjectile
 	static readonly int _projectileRandom = 1 + _projectileCooldown / 10;
 
 	int _shootingAndKillingPeopleForFun = Main.rand.Next(0, _projectileRandom);
+	int _damage;
+
+	bool _animate = true;
 
 	public override void SetStaticDefaults()
 	{
@@ -63,6 +67,19 @@ public class IndulgentImp : ModProjectile
 		Projectile.penetrate = -1;
 	}
 
+	public override void OnSpawn(IEntitySource source)
+	{
+		Player owner = Main.player[Projectile.owner];
+
+		if (!owner.TryGetModPlayer(out IndulgentImpController ii))
+			return;
+
+		if (ii.Stage > 1)
+			Projectile.Kill();
+		else
+			_damage = Projectile.damage;
+	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;
@@ -77,10 +94,66 @@ public class IndulgentImp : ModProjectile
 	{
 		Player owner = Main.player[Projectile.owner];
 
-		if (!owner.TryGetModPlayer(out IndulgentImpPlayer ii) || !CheckActive(owner))
+		if (!owner.TryGetModPlayer(out IndulgentImpController ii) || !CheckActive(owner))
 			return;
 
+		int frameSpeed = 15;
+		int startFrame = 0;
+		int endFrame = 3;
+
 		NPC target = Projectile.FindTargetWithinRange(800);
+
+		switch (ii.Stage)
+		{
+			case 1:
+				Projectile.aiStyle = ProjAIStyleID.Hornet;
+				Projectile.damage = _damage;
+				break;
+			case 2:
+				Projectile.aiStyle = ProjAIStyleID.Hornet;
+				Projectile.damage = _damage * 2;
+				Projectile.minionSlots = 2;
+
+				startFrame = 3;
+				endFrame = 6;
+				break;
+			case 3:
+				Projectile.aiStyle = ProjAIStyleID.GroundProjectile;
+				Projectile.damage = _damage * 4;
+
+				Projectile.minion = false;
+				Projectile.minionSlots = 0;
+				Projectile.sentry = true;
+				Projectile.netImportant = true;
+				owner.UpdateMaxTurrets();
+
+				DrawOffsetX = -6;
+
+				Projectile.width = 78;
+				Projectile.height = 54;
+
+				startFrame = 6;
+				endFrame = 11;
+
+				if (Projectile.Distance(owner.Center) > 800 || ii.QuickTeleport)
+				{
+					Vector2 offset = new(0, -20);
+					Vector2 tpSpot = owner.Center + offset;
+
+					if (ii.QuickTeleport)
+						tpSpot = Main.MouseWorld;
+
+					TeleportEffects(Projectile.position);
+
+					Projectile.Center = tpSpot;
+					Projectile.direction = owner.direction;
+
+					TeleportEffects(Projectile.position);
+
+					ii.QuickTeleport = false;
+				}
+				break;
+		}
 
 		if (target != null)
 		{
@@ -90,25 +163,42 @@ public class IndulgentImp : ModProjectile
 			{
 				_shootingAndKillingPeopleForFun = Main.rand.Next(0, _projectileRandom);
 
-				Vector2 direction = Projectile.Center.DirectionTo(target.Center);
+				if (Main.myPlayer == Projectile.owner)
+				{
+					Vector2 direction = Projectile.Center.DirectionTo(target.Center);
 
-				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, direction * 12f, ProjectileID.ImpFireball, Projectile.damage, Projectile.knockBack);
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, direction * 12f, ProjectileID.ImpFireball, Projectile.damage, Projectile.knockBack);
+				}
 			}
+
+			if (ii.Stage == 3)
+				_animate = true;
 		}
+		else if (ii.Stage == 3)
+			_animate = false;
 
 		Projectile.rotation = Projectile.velocity.X * 0.05f;
 
-		int frameSpeed = 15;
+		if (ii.Stage != ii.PrevStage)
+			Projectile.frame = startFrame;
 
-		Projectile.frameCounter++;
+		ii.PrevStage = ii.Stage;
+
+		if (_animate)
+			Projectile.frameCounter++;
+		else
+		{
+			Projectile.frameCounter = 0;
+			Projectile.frame = startFrame;
+		}
 
 		if (Projectile.frameCounter >= frameSpeed)
 		{
-			Projectile.frameCounter = 0;
+			Projectile.frameCounter = startFrame;
 			Projectile.frame++;
 
-			if (Projectile.frame >= 3)
-				Projectile.frame = 0;
+			if (Projectile.frame >= endFrame)
+				Projectile.frame = startFrame;
 		}
 
 		if (Main.rand.NextBool(6))
@@ -118,6 +208,18 @@ public class IndulgentImp : ModProjectile
 			dust.velocity *= 0.3f;
 			dust.noGravity = true;
 			dust.noLight = true;
+		}
+	}
+
+	void TeleportEffects(Vector2 position)
+	{
+		SoundEngine.PlaySound(SoundID.Item8, position);
+
+		for (int i = 0; i < 50; i++)
+		{
+			Dust fire = Dust.NewDustDirect(position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, default, default, 2f);
+
+			fire.noGravity = true;
 		}
 	}
 
@@ -137,9 +239,11 @@ public class IndulgentImp : ModProjectile
 	}
 }
 
-public class IndulgentImpPlayer : ModPlayer
+public class IndulgentImpController : ModPlayer
 {
 	public int Stage;
+	public int PrevStage;
+	public bool QuickTeleport;
 
 	public override void PreUpdateBuffs()
 	{

@@ -45,13 +45,16 @@ public class ImpScepter : ModItem
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
-        if (!player.TryGetModPlayer(out IndulgentImpPlayer ii))
+        if (!player.TryGetModPlayer(out IndulgentImpController ii))
             return false;
 
         if (!player.HasBuff(Item.buffType))
             player.AddBuff(Item.buffType, 2);
-        else if (ii.Stage < 2)
+
+        if (ii.Stage < 3)
             ii.Stage++;
+        else
+            ii.QuickTeleport = true;
 
         return true;
     }
