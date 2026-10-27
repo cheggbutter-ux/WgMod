@@ -85,15 +85,7 @@ public class BouncyBall : ModProjectile
 
     public bool IsValidTarget(NPC target)
     {
-        return target.CanBeChasedBy()
-            && Collision.CanHit(
-                Projectile.Center,
-                1,
-                1,
-                target.position,
-                target.width,
-                target.height
-            );
+        return target.CanBeChasedBy() && Collision.CanHit(Projectile.Center, 1, 1, target.position, target.width, target.height);
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity)
@@ -190,19 +182,11 @@ public class BouncyBall : ModProjectile
     {
         Projectile.PrepareBombToBlow();
         SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+
         for (int i = 0; i < 50; i++)
         {
-            Dust cute = Dust.NewDustDirect(
-                Projectile.position,
-                77,
-                77,
-                DustID.GemRuby,
-                0,
-                0,
-                100,
-                default,
-                1
-            );
+            Dust cute = Dust.NewDustDirect(Projectile.position, 77, 77, DustID.GemRuby, 0, 0, 100, default, 1);
+
             cute.noGravity = true;
         }
     }

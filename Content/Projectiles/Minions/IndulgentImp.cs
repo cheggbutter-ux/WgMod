@@ -7,6 +7,8 @@ using Terraria.ModLoader;
 
 namespace WgMod.Content.Projectiles.Minions;
 
+[Credit(ProjectRole.Programmer, Contributor.maimaichubs)]
+[Credit(ProjectRole.Artist, Contributor.PLACEHOLDER)]
 public class IndulgentImpBuff : ModBuff
 {
 	public override void SetStaticDefaults()
@@ -27,6 +29,8 @@ public class IndulgentImpBuff : ModBuff
 	}
 }
 
+[Credit(ProjectRole.Programmer, Contributor.maimaichubs)]
+[Credit(ProjectRole.Artist, Contributor.sinnerdrip)]
 public class IndulgentImp : ModProjectile
 {
 	static readonly int _projectileCooldown = 120;
@@ -239,6 +243,7 @@ public class IndulgentImp : ModProjectile
 	}
 }
 
+[Credit(ProjectRole.Programmer, Contributor.maimaichubs)]
 public class IndulgentImpController : ModPlayer
 {
 	public int Stage;

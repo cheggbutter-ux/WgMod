@@ -24,15 +24,15 @@ public class HellsBeesBuff : ModBuff
 [Credit(ProjectRole.Artist, Contributor.sinnerdrip)]
 public class HellishBee : ModProjectile
 {
-    public const int StageCount = 4;
-    public const int MaxStage = StageCount - 1;
+    const int StageCount = 4;
+    const int MaxStage = StageCount - 1;
 
-    public int _weightProgress;
-    public int _weightStage;
-    public int _flyFrame;
+    int _weightProgress;
+    int _weightStage;
+    int _flyFrame;
 
-    public float _speedModifier;
-    public float _damageModifier;
+    float _speedModifier;
+    float _damageModifier;
 
     public override void SetStaticDefaults()
     {

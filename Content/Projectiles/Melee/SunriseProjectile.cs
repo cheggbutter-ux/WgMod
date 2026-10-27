@@ -66,6 +66,7 @@ public class SunriseProjectile : ModProjectile
     public override void AI()
     {
         UpdateAlpha();
+
         if (IsStickingToTarget)
             StickyAI();
         else
@@ -92,6 +93,7 @@ public class SunriseProjectile : ModProjectile
             dust.velocity += Projectile.velocity * 0.3f;
             dust.velocity *= 0.2f;
         }
+
         if (Main.rand.NextBool(4))
         {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.height, Projectile.width, ModContent.DustType<CutieHeart>(),
@@ -111,6 +113,7 @@ public class SunriseProjectile : ModProjectile
 
         bool hitEffect = StickTimer % 30f == 0f;
         int npcTarget = TargetWhoAmI;
+
         if (StickTimer >= StickTime || npcTarget < 0 || npcTarget >= 200)
             Projectile.Kill();
         else if (Main.npc[npcTarget].active && !Main.npc[npcTarget].dontTakeDamage)
@@ -150,8 +153,7 @@ public class SunriseProjectile : ModProjectile
     {
         IsStickingToTarget = true;
         TargetWhoAmI = target.whoAmI;
-        Projectile.velocity = (target.Center - Projectile.Center) *
-            0.75f;
+        Projectile.velocity = (target.Center - Projectile.Center) * 0.75f;
         Projectile.netUpdate = true;
         Projectile.damage = 0;
 
@@ -169,6 +171,7 @@ public class SunriseProjectile : ModProjectile
     {
         if (targetHitbox.Width > 8 && targetHitbox.Height > 8)
             targetHitbox.Inflate(-targetHitbox.Width / 8, -targetHitbox.Height / 8);
+
         return projHitbox.Intersects(targetHitbox);
     }
 
@@ -187,6 +190,7 @@ public class SunriseProjectile : ModProjectile
                 return;
             }
         }
+
         behindNPCsAndTiles.Add(index);
     }
 
