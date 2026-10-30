@@ -275,11 +275,11 @@ Items: {
 
 	MeteorCrush: {
 		DisplayName: Aplaste de Meteorito
-		Tooltip: 
-		'''
-		Hace que tu peso te permita aplastar enemigos
-		'Si, es una pena terrible...'
-		'''
+		Tooltip:
+			'''
+			Hace que tu peso te permita aplastar enemigos
+			'Si, es una pena terrible...'
+			'''
 	}
 
 	HoneyedHamBat: {
@@ -1501,11 +1501,11 @@ NPCs: {
 			DislikeCrowded: ¡Por favor haz que estos humanos paren de arrullar!
 			HateCrowded: Scree! ¡Burbuja personal!
 			HateBiome: ¡No puedo volar en este bioma! ¡Me voy a dar la cabeza contra el techo!
-			LoveNPC: "¡{NPCName} entiende como me siento de una manera que no humano podría!"
+			LoveNPC: ¡{NPCName} entiende como me siento de una manera que no humano podría!
 			LikeNPC: "{¡NPCName} se ofrecio a armarme alas de engranajes!"
 			DislikeNPC: UwU
 			HateNPC: Scraw! ¡Ese {NPCName} me pinto gorda!
-			LikeNPC_Princess: "¡{NPCName} es mi humana favorita! ¡Tan alegre y divertida!"
+			LikeNPC_Princess: ¡{NPCName} es mi humana favorita! ¡Tan alegre y divertida!
 			Princess_LovesNPC: ¡No sabia que arpías como {NPCName} podian ser tan amables!
 			LikeBiome: Puedo ver el cielo desde aqui... ¡Algun dia volvere!
 			DislikeBiome: ¡Esta f-f-frio! ¡Necesito volar al sur por el invierno!
@@ -1520,7 +1520,7 @@ NPCs: {
 		DisplayName: Milkmaid
 
 		TownNPCMood: {
-			Princess_LovesNPC: "¡{NPCName} es tan grande y suave!"
+			Princess_LovesNPC: ¡{NPCName} es tan grande y suave!
 			LikeNPC_Princess: Esa {NPCName} es una preciosa pequeña mujer.
 			HateNPC: Dile a {NPCName} que si viene por aqui devuelta, voy a esperarlo con la escopeta.
 			LikeNPC: "{NPCName} y yo tenemos una buena relacion de negocios."
@@ -1610,7 +1610,7 @@ Dialogue: {
 		SkeletronDialogue2: Caw! ¡Esa malvada calavera que mataste fue perfecto para construir un arco de tormentas de arpía tradicional!
 		QuestFishDialogue1: No, ¡no te voy a llevar hasta los lagos del cielo por tus pescados!
 		CatDialogue1: Oye... ¿puedo cuidar a {0} hoy? ¡Por ningun motivo! Es solo que podria comermelo- ¡A besos digo!
-		DogDialogue1: "¡{0} me ladra todo el tiempo! ¡No soy un pajaro!"
+		DogDialogue1: ¡{0} me ladra todo el tiempo! ¡No soy un pajaro!
 	}
 
 	Milkmaid: {
@@ -1657,7 +1657,7 @@ Dialogue: {
 		StandardDialogue2: Bwah! ¡No mires la barriga de {0}!
 		StandardDialogue3: ¡Slime como {0} puede montar cofre! ¡Verse como botín!
 		StandardDialogue4: ¿Tu nombre {1}? ¡Ese nombre tonto! ¡{0} nombre mejor!
-		StandardDialogue5: "Cofre de {0} se esta volviendo muy pesado para saltar... ¡culpa humano!"
+		StandardDialogue5: Cofre de {0} se esta volviendo muy pesado para saltar... ¡culpa humano!
 		StandardDialogue6: Hambre... ¡{1}! Dar {0} comida! ¡Ahora!
 		StandardDialogue7: Podria {1} uhmm... enseñar {0} como funcionan puertas denuevo?
 		StandardDialogue8: Uuurrp... {0} encontro un pequeño conejo... ¡muy rico!
@@ -1666,8 +1666,8 @@ Dialogue: {
 		BloodMoonDialogue3: OOUUURRRPP...
 		HomelessDialogue1: ¡Humano malo! ¡Dar {0} un hogar!
 		HomelessDialogue2: ¿Puede humano hacer un cofre muy muy grande para {0}?
-		HomelessDialogue3: "¡{0} muy gordo para cofre! ¡Oh no!"
-		PartyDialogue1: "¡{0} intento tomar siesta y humanos pusieron tazas arriba de {0}! ¡Muy grosero!"
+		HomelessDialogue3: ¡{0} muy gordo para cofre! ¡Oh no!
+		PartyDialogue1: ¡{0} intento tomar siesta y humanos pusieron tazas arriba de {0}! ¡Muy grosero!
 		PartyDialogue2: Woo woo woo! ¡Bailar bailar!
 		StormDialogue1: Humano, ¡ayuda! ¡Hay monstruo gigante ruidoso afuera!
 		StormDialogue2: AH! ¡HUIR!
