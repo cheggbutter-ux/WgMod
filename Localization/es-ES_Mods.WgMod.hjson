@@ -1128,6 +1128,11 @@ Items: {
 		DisplayName: Cetro Demoniaco
 		Tooltip: ""
 	}
+
+	SlamFire: {
+		// Tooltip: ""
+		// DisplayName: Slam Fire
+	}
 }
 
 Buffs: {

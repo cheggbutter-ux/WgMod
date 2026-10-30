@@ -26,6 +26,7 @@ public static class WgSounds
     public static readonly WgSound Stomp = new("WgMod/Assets/Sounds/Stomp_", 5);
     public static readonly WgSound Squeaky = new("WgMod/Assets/Sounds/Squeaky");
     public static readonly WgSound Gurgle = new("WgMod/Assets/Sounds/Gurgle_", 4, VolumeChannel.Gurgle) { PitchVariance = 0.08f };
+    public static readonly WgSound SlamFire = new("WgMod/Assets/Sounds/SlamFire_", 4);
 }
 
 public class WgSound

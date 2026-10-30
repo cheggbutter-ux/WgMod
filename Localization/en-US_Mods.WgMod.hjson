@@ -1124,6 +1124,11 @@ Items: {
 		DisplayName: Imp Scepter
 		Tooltip: ""
 	}
+
+	SlamFire: {
+		Tooltip: ""
+		DisplayName: Slam Fire
+	}
 }
 
 Buffs: {
