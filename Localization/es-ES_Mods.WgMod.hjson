@@ -1129,7 +1129,7 @@ Items: {
 		Tooltip: ""
 	}
 
-  SlamFire: {
+	SlamFire: {
 		// Tooltip: ""
 		// DisplayName: Slam Fire
 	}
