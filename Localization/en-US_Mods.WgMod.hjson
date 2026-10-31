@@ -1318,6 +1318,15 @@ Buffs: {
 		DisplayName: Indulgent Imp Buff
 		Description: Mods.WgMod.Buffs.IndulgentImpBuff.Description
 	}
+
+	ManaThickness: {
+		DisplayName: Mana Thickness
+		Description:
+			'''
+			Metabolism slowed from an abundance of magical energy.
+			Weight gain rate increased by {0}%
+			'''
+	}
 }
 
 Configs: {
@@ -1798,6 +1807,11 @@ Prefixes: {
 		+{2}% critical strike chance
 		-{1}% attack speed
 		'''
+	MaxManaTooltip:
+		'''
+		+{0} max mana
+		-{1}% attack speed
+		'''
 
 	Padded: {
 		DisplayName: Padded
@@ -1812,6 +1826,11 @@ Prefixes: {
 	Rotund: {
 		DisplayName: Rotund
 		AdditionalTooltip: uwu
+	}
+
+	Abundant: {
+		AdditionalTooltip: uwu
+		DisplayName: Abundant
 	}
 }
 

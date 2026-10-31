@@ -50,6 +50,8 @@ public enum Contributor
     robinn9283,
     magicalmoondust_,
     alphas0,
+    evanescentsummer,
+    Chegg,
 
     [Category("Other")]
     purple_circle,

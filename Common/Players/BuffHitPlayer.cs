@@ -33,10 +33,12 @@ public partial class BuffHitPlayer : ModPlayer
         if (!Player.TryGetModPlayer(out WgPlayer wg) || !Main.rand.NextBool(chance))
             return;
         Player.AddBuff(type, timeToAdd);
-        weightGain = wg.AddWeight(weightGain);
-        SoundEngine.PlaySound(WgSounds.Gulp, Player.Center);
         if (weightGain > 0f)
+        { 
+            weightGain = wg.AddWeight(weightGain);
+            SoundEngine.PlaySound(WgSounds.Gulp, Player.Center);
             wg.CombatWeightText(weightGain, true);
+        }
     }
 
     public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
@@ -49,6 +51,9 @@ public partial class BuffHitPlayer : ModPlayer
 
         if (_feeders.Contains(npc.type))
             AddBuff(_feedersBuff, 60 * 3 + 10 * hurtInfo.Damage, hurtInfo.Damage / 8, 6);
+
+        if (_manaThicknessNPCs.Contains(npc.type))
+            AddBuff(_manaThickness, 60 * 15 + 10 * hurtInfo.Damage, 0, 2);
 
         if (npc.type == NPCID.HallowBoss && hurtInfo.Damage < 1250)
             AddBuff(_empressBuff, 4 * hurtInfo.Damage, hurtInfo.Damage / 6, 1);
@@ -63,7 +68,10 @@ public partial class BuffHitPlayer : ModPlayer
             AddBuff(_beesBuff, 60 * 10 + 10 * hurtInfo.Damage, hurtInfo.Damage / 10, 8);
 
         if (_feederProjectiles.Contains(proj.type))
-            AddBuff(_feedersBuff, 60 * 3 + 5 * hurtInfo.Damage, hurtInfo.Damage / 8, 6);
+            AddBuff(_feedersBuff, 60 * 3 + 5 * hurtInfo.Damage, hurtInfo.Damage / 8, 8);
+
+        if (_manaThicknessProjectiles.Contains(proj.type))
+            AddBuff(_manaThickness, 60 * 15 + 10 * hurtInfo.Damage, 0, 2);
 
         if (_empressOfLight.Contains(proj.type) && hurtInfo.Damage < 1250)
             AddBuff(_empressBuff, 3 * hurtInfo.Damage, hurtInfo.Damage / 7, 1);

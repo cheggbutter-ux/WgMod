@@ -1,4 +1,4 @@
-displayName = Weight Gain
+displayName = Weight Gain (Chegg)
 author = WgMod Team
 version = 0.2.1
 side = Both

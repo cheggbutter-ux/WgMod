@@ -442,7 +442,7 @@ public partial class WgPlayer : ModPlayer
 
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
     {
-        SetWeight(new Weight(Weight.Mass * WeightValues.GetDeathPenalty(Player.difficulty)));
+        SetWeight(new Weight(Weight.Mass));
     }
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)

@@ -1129,7 +1129,7 @@ Items: {
 		Tooltip: ""
 	}
 
-	SlamFire: {
+  SlamFire: {
 		// Tooltip: ""
 		// DisplayName: Slam Fire
 	}
@@ -1321,6 +1321,15 @@ Buffs: {
 	IndulgentImpBuff: {
 		DisplayName: Buff de Diablo Indulgente
 		Description: Mods.WgMod.Buffs.IndulgentImpBuff.Description
+	}
+
+	ManaThickness: {
+		// DisplayName: Mana Thickness
+		/* Description:
+			'''
+			Metabolism slowed from an abundance of magical energy.
+			Weight gain rate increased by {0}%
+			''' */
 	}
 }
 
@@ -1802,6 +1811,11 @@ Prefixes: {
 		+{2}% posibilidad de golpe critico
 		-{1}% velocidad de ataque
 		'''
+	/* MaxManaTooltip:
+		'''
+		+{0} max mana
+		-{1}% attack speed
+		''' */
 
 	Padded: {
 		DisplayName: Rechoncho
@@ -1816,6 +1830,11 @@ Prefixes: {
 	Rotund: {
 		DisplayName: Rotundo
 		AdditionalTooltip: uwu
+	}
+
+	Abundant: {
+		// AdditionalTooltip: uwu
+		// DisplayName: Abundant
 	}
 }
 
