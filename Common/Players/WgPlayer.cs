@@ -15,8 +15,17 @@ namespace WgMod.Common.Players;
 
 public partial class WgPlayer : ModPlayer
 {
+    /// <summary>
+    /// The time it takes between digestion ticks ranged between 1x and 2x this value.
+    /// </summary>
     public const int DigestTime = 60;
+    /// <summary>
+    /// The amount of mass to be digested per digestion tick
+    /// </summary>
     public const float DigestAmount = 0.25f;
+    /// <summary>
+    /// The maximum mass that can be stored in the player's stomach
+    /// </summary>
     public const float StomachCapacity = 20f;
 
     /// <summary> The player's weight </summary>
@@ -87,6 +96,12 @@ public partial class WgPlayer : ModPlayer
         return !Main.dedServ && Player.whoAmI == Main.myPlayer;
     }
 
+    /// <summary>
+    /// Sets a player's weight.
+    /// Will respect player configuration.
+    /// </summary>
+    /// <param name="weight">The weight to set</param>
+    /// <param name="effects">If visual and audio effects should play</param>
     public void SetWeight(Weight weight, bool effects = true)
     {
         if (!OwnsPlayer() || _finalWeightFixed)
@@ -97,6 +112,13 @@ public partial class WgPlayer : ModPlayer
         SetWeightForced(weight, effects);
     }
 
+    /// <summary>
+    /// Adds to a player's weight.
+    /// Will respect player configuration.
+    /// </summary>
+    /// <param name="mass">The mass to add</param>
+    /// <param name="effects">If visual and audio effects should play</param>
+    /// <returns>The different between the new and old mass</returns>
     public Mass AddWeight(Mass mass, bool effects = true)
     {
         Weight start = Weight;
@@ -106,7 +128,12 @@ public partial class WgPlayer : ModPlayer
         return Weight.Mass - start.Mass;
     }
 
-    /// <summary> Do not use this unless you know what you're doing </summary>
+    /// <summary>
+    /// Sets a player's weight.
+    /// Will bypass player configuration.
+    /// </summary>
+    /// <param name="weight">The weight to set</param>
+    /// <param name="effects">If visual and audio effects should play</param>
     internal void SetWeightForced(Weight weight, bool effects = true)
     {
         int prevStage = Weight.GetStage();
@@ -119,6 +146,12 @@ public partial class WgPlayer : ModPlayer
         }
     }
 
+    /// <summary>
+    /// Sets a player's stomach contents.
+    /// Will respect player configuration.
+    /// </summary>
+    /// <param name="mass">The mass to set</param>
+    /// <param name="effects">If visual and audio effects should play</param>
     public void SetStomach(Mass mass, bool effects = true)
     {
         if (!OwnsPlayer())
@@ -128,6 +161,13 @@ public partial class WgPlayer : ModPlayer
         SetStomachForced(mass, effects);
     }
 
+    /// <summary>
+    /// Adds to a player's stomach contents.
+    /// Will respect player configuration.
+    /// </summary>
+    /// <param name="mass">The mass to add</param>
+    /// <param name="effects">If visual and audio effects should play</param>
+    /// <returns>The different between the new and old mass</returns>
     public Mass AddStomach(Mass mass, bool effects = true)
     {
         Mass start = Stomach;
@@ -135,6 +175,12 @@ public partial class WgPlayer : ModPlayer
         return Stomach - start;
     }
 
+    /// <summary>
+    /// Sets a player's somtach contents.
+    /// Will bypass player configuration.
+    /// </summary>
+    /// <param name="mass">The mass to set</param>
+    /// <param name="effects">If visual and audio effects should play</param>
     internal void SetStomachForced(Mass mass, bool effects = true)
     {
         Stomach = Math.Clamp(mass, 0f, StomachCapacity);
@@ -142,6 +188,9 @@ public partial class WgPlayer : ModPlayer
             AddWeight(mass - StomachCapacity, effects);
     }
 
+    /// <summary>
+    /// Resets all WgPlayer state values to their defaults.
+    /// </summary>
     public override void ResetEffects()
     {
         // Custom stats
@@ -181,6 +230,11 @@ public partial class WgPlayer : ModPlayer
         }
     }
 
+    /// <summary>
+    /// Applies a buff, if it is not currently applied.
+    /// </summary>
+    /// <typeparam name="T">The buff to be ensured</typeparam>
+    /// <param name="time">If the buff is not currently applied, how long should it be applied for</param>
     public void EnsureBuff<T>(int time = 60) where T : ModBuff
     {
         int type = ModContent.BuffType<T>();
@@ -198,18 +252,26 @@ public partial class WgPlayer : ModPlayer
 
         const float mountReduction = 0.8f;
         if (Player.mount.Active)
+        {
             MovementPenalty *= mountReduction;
+        }
 
         int stage = Weight.GetStage();
         if (stage >= WeightStage.DamageReduction)
         {
             if (stage < WeightStage.SoftImmobile)
+            {
                 _finalKnockbackResistance = float.Lerp(0f, 0.6f, Weight.GetClampedFactor(WeightStage.DamageReduction, WeightStage.SoftImmobile));
+            }
             else
+            {
                 _finalKnockbackResistance = 1f;
+            }
         }
         else
+        {
             _finalKnockbackResistance = 0f;
+        }
 
         float basePenalty;
         if (stage < WeightStage.SoftImmobile)
@@ -224,7 +286,9 @@ public partial class WgPlayer : ModPlayer
         }
         basePenalty = MovementPenalty.ApplyTo(basePenalty);
         if (PreventImmobility)
+        {
             basePenalty = -1f / (2f * basePenalty + 1f) + 1f;
+        }
         _finalMovementFactor = Math.Clamp(1f - basePenalty, 0f, 1f);
 
         Player.runAcceleration *= _finalMovementFactor;
@@ -249,7 +313,9 @@ public partial class WgPlayer : ModPlayer
             float factor = MathF.Abs(Player.velocity.X) * 0.5f;
             factor += MathF.Abs(acc.X) * 5f;
             if (JustJumped)
+            {
                 factor += 5f;
+            }
             factor /= 60f * 60f; // ticks to minutes
             AddWeight(-MovementWeightLossRate.ApplyTo(factor));
         }
@@ -261,28 +327,40 @@ public partial class WgPlayer : ModPlayer
             if (Player.velocity.Y > -0.01f && HasIceBelow())
             {
                 if (_iceBreakTimer == iceBreakTime / 2)
+                {
                     SoundEngine.PlaySound(SoundID.Item127);
+                }
                 _iceBreakTimer++;
                 if (_iceBreakTimer > iceBreakTime)
+                {
                     ThinIceBreak();
+                }
             }
             else
+            {
                 _iceBreakTimer = 0;
+            }
         }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
     {
         if (target.type == NPCID.KingSlime && target.life - damageDone <= 0 && Weight.GetStage() == WeightStage.Blob)
+        {
             ImBigger.Condition.Complete();
+        }
     }
 
+    /// <summary>
+    /// Applies the relevant hitboxes for a given stage.
+    /// </summary>
+    /// <param name="stage">The stage id</param>
     void ResizeHitbox(int stage)
     {
-        // None of our business
+        // if the player's hitbox has been externally modified we skip modifying the hitbox
         if ((Player.width + 12) % 16 != 0 || Player.height != Player.defaultHeight)
         {
-            if (Player.mount.Active && Player.width != Player.defaultWidth) // However... vanilla mounts don't change the width. Cater to them.
+            if (Player.mount.Active && Player.width != Player.defaultWidth) // Vanilla mounts expect default play width.
             {
                 float targetX = Player.position.X + Player.width * 0.5f - Player.defaultWidth * 0.5f;
                 Player.width = Player.defaultWidth;
@@ -293,7 +371,10 @@ public partial class WgPlayer : ModPlayer
 
         int targetWidth = Player.defaultWidth;
         if (!WgServerConfig.Instance.DisableFatHitbox && !Player.mount.Active && !Player.isLockedToATile)
+        {
             targetWidth = WeightValues.GetHitboxWidthInTiles(stage) * 16 - 12;
+        }
+
         if (Player.width != targetWidth)
         {
             float targetX = Player.position.X + Player.width * 0.5f - targetWidth * 0.5f;
@@ -304,10 +385,16 @@ public partial class WgPlayer : ModPlayer
                 Player.position.X = targetX;
             }
             else
+            {
                 _squishRest = 1.2f;
+            }
         }
     }
 
+    /// <summary>
+    /// Perform calculations for how the play's softbody should push against blocks and affect their position.
+    /// </summary>
+    /// <param name="stage">The stage id</param>
     void SoftHitbox(int stage)
     {
         if (WgServerConfig.Instance.DisableFatHitbox || !WeightValues.EnableSoftHitbox(stage) || Player.mount.Active)
@@ -356,14 +443,20 @@ public partial class WgPlayer : ModPlayer
                     SetStomach(Stomach - delta);
                     AddWeight(delta);
                     if (Main.rand.NextBool(75))
+                    {
                         PlaySound(WgSounds.Gurgle);
+                    }
                     _digestTimer = Main.rand.Next(DigestTime, DigestTime * 2);
                 }
                 else
+                {
                     _digestTimer -= rate;
+                }
             }
             else
-                _digestTimer = DigestTime * 2;
+            {
+                _digestTimer = DigestTime * 2; // first digestion tick after being on an empty stomach is always max length
+            }
         }
 
         int frame = Player.legFrame.Y / Player.legFrame.Height;
@@ -371,7 +464,9 @@ public partial class WgPlayer : ModPlayer
         {
             float volume = Weight.GetClampedFactor(WeightStage.MorbidlyObese, WeightStage.SoftImmobile) * 0.25f;
             if (volume > 0.01f)
+            {
                 SoundEngine.PlaySound(WgSounds.Thump.Build(volume), Player.Center);
+            }
         }
         _lastLegFrame = frame;
 
@@ -381,7 +476,9 @@ public partial class WgPlayer : ModPlayer
 
         _finalMaxStage = Math.Clamp(MaxStage, 0, WeightStage.Max);
         if (_ignoreWgBuffTimer > 0)
+        {
             _ignoreWgBuffTimer--;
+        }
 
         int stage = Weight.GetStage();
         if (Player.sleeping.isSleeping && stage >= WeightStage.Obese)
@@ -391,7 +488,9 @@ public partial class WgPlayer : ModPlayer
         }
 
         if (stage >= WeightStage.Fat)
+        {
             TownNPCRespawnSystem.unlockMilkmaid = true;
+        }
     }
 
     public override void UpdateDead()
@@ -400,6 +499,9 @@ public partial class WgPlayer : ModPlayer
     }
 
     // Taken from CheckIceBreak() in Player.cs
+    /// <summary>
+    /// checks for breakable ice tiles below the player and breaks them.
+    /// </summary>
     void ThinIceBreak()
     {
         Vector2 pos = Player.position + Player.velocity;
@@ -422,6 +524,9 @@ public partial class WgPlayer : ModPlayer
     }
 
     // Not exactly proud of this...
+    /// <summary>
+    /// Check if there is breakable ice below the current player.
+    /// </summary>
     bool HasIceBelow()
     {
         Vector2 pos = Player.position + Player.velocity;
@@ -440,10 +545,10 @@ public partial class WgPlayer : ModPlayer
         return false;
     }
 
-    public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
-    {
-        SetWeight(new Weight(Weight.Mass));
-    }
+    //public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+    //{
+    //    SetWeight(new Weight(Weight.Mass));
+    //}
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)
     {
@@ -458,6 +563,8 @@ public partial class WgPlayer : ModPlayer
     public override void RefreshInfoAccessoriesFromTeamPlayers(Player otherPlayer)
     {
         if (otherPlayer.Wg()._displayWeight)
+        {
             _displayWeight = true;
+        }
     }
 }
