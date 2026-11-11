@@ -12,8 +12,9 @@ using WgMod.Common.Players;
 namespace WgMod.Content.Prefixes;
 public class Abundant : ModPrefix
 {
-    WgStat _mana = new WgStat(5f, 40f);
-    WgStat _attackSpeed = new WgStat(0.01f, 0.04f);
+    WgStat _mana = new(5f, 25f);
+    WgStat _manaCost = new(0f, 0.02f);
+    WgStat _attackSpeed = new(0.01f, 0.04f);
 
     public override PrefixCategory Category => PrefixCategory.Accessory;
 
@@ -35,13 +36,17 @@ public class Abundant : ModPrefix
     public override void ApplyAccessoryEffects(Player player)
     {
         if (!player.TryGetModPlayer(out WgPlayer wg))
+        {
             return;
+        }
         float immobility = wg.Weight.ClampedImmobility;
 
         _mana.Lerp(immobility);
+        _manaCost.Lerp(immobility);
         _attackSpeed.Lerp(immobility);
 
         player.statManaMax2 += _mana;
+        player.manaCost -= _manaCost;
         player.GetAttackSpeed(DamageClass.Generic) -= _attackSpeed;
     }
 
