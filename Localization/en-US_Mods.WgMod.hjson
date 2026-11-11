@@ -1315,17 +1315,37 @@ Buffs: {
 	}
 
 	IndulgentImpBuff: {
-		DisplayName: Indulgent Imp Buff
-		Description: Mods.WgMod.Buffs.IndulgentImpBuff.Description
+		DisplayName: Indulgent Imp
+		Description: The Indulgent Imp will fight for you
 	}
 
 	ManaThickness: {
 		DisplayName: Mana Thickness
 		Description:
 			'''
-			Metabolism slowed from an abundance of magical energy.
+			Metabolism slowed from an abundance of magical energy
 			Weight gain rate increased by {0}%
 			'''
+	}
+
+	SugaryAir: {
+		DisplayName: Sugary Air
+		Description: The air tastes sweet
+	}
+
+	SugarySmog: {
+		DisplayName: Sugary Smog
+		Description: The air is sickeningly sweet
+	}
+
+	Lipidation: {
+		DisplayName: Lipidation
+		Description: The air is thick with grease
+	}
+
+	SmokeyAir: {
+		DisplayName: Smokey Air
+		Description: The air is thick with smoke
 	}
 }
 

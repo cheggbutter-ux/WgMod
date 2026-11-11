@@ -1331,6 +1331,26 @@ Buffs: {
 			Weight gain rate increased by {0}%
 			''' */
 	}
+
+	SugaryAir: {
+		// DisplayName: Sugary Air
+		// Description: Mods.WgMod.Buffs.SugaryAir.Description
+	}
+
+	SugarySmog: {
+		// DisplayName: Sugary Smog
+		// Description: Mods.WgMod.Buffs.SugarySmog.Description
+	}
+
+	Lipidation: {
+		// DisplayName: Lipidation
+		// Description: Mods.WgMod.Buffs.Lipidation.Description
+	}
+
+	SmokeyAir: {
+		// DisplayName: Smokey Air
+		// Description: Mods.WgMod.Buffs.SmokeyAir.Description
+	}
 }
 
 Configs: {
