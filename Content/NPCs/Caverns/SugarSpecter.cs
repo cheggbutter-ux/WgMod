@@ -26,6 +26,7 @@ public class SugarSpecter : SweetSpirit
         NPC.defense = 18;
         NPC.lifeMax = 150;
         NPC.value = 100f;
+        NPC.knockBackResist = 0.25f;
 
         NPC.DeathSound = SoundID.NPCDeath6;
     }
