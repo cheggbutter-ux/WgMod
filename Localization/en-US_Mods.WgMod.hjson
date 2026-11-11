@@ -1852,6 +1852,12 @@ Prefixes: {
 		AdditionalTooltip: uwu
 		DisplayName: Abundant
 	}
+
+	Cursed.DisplayName: Cursed
+	Ravenous.DisplayName: Ravenous
+	Titanic.DisplayName: Titanic
+	Overflowing.DisplayName: Overflowing
+	CursedTooltip: Damages your waistline
 }
 
 MapObject.DecorativeWeightPotions: Decorative Weight Potion

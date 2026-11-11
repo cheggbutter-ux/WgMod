@@ -1327,29 +1327,29 @@ Buffs: {
 		// DisplayName: Mana Thickness
 		/* Description:
 			'''
-			Metabolism slowed from an abundance of magical energy.
+			Metabolism slowed from an abundance of magical energy
 			Weight gain rate increased by {0}%
 			''' */
 	}
 
 	SugaryAir: {
 		// DisplayName: Sugary Air
-		// Description: Mods.WgMod.Buffs.SugaryAir.Description
+		// Description: The air tastes sweet
 	}
 
 	SugarySmog: {
 		// DisplayName: Sugary Smog
-		// Description: Mods.WgMod.Buffs.SugarySmog.Description
+		// Description: The air is sickeningly sweet
 	}
 
 	Lipidation: {
 		// DisplayName: Lipidation
-		// Description: Mods.WgMod.Buffs.Lipidation.Description
+		// Description: The air is thick with grease
 	}
 
 	SmokeyAir: {
 		// DisplayName: Smokey Air
-		// Description: Mods.WgMod.Buffs.SmokeyAir.Description
+		// Description: The air is thick with smoke
 	}
 }
 
@@ -1856,6 +1856,12 @@ Prefixes: {
 		// AdditionalTooltip: uwu
 		// DisplayName: Abundant
 	}
+
+	// Cursed.DisplayName: Cursed
+	// Ravenous.DisplayName: Ravenous
+	// Titanic.DisplayName: Titanic
+	// Overflowing.DisplayName: Overflowing
+	// CursedTooltip: Damages your waistline
 }
 
 MapObject.DecorativeWeightPotions: Poción de Peso Decorativa
