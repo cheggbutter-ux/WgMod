@@ -1,10 +1,12 @@
 using System;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 using WgMod.Common.Configs;
 using WgMod.Common.Systems;
 using WgMod.Content.Achievements;
@@ -81,9 +83,19 @@ public partial class WgPlayer : ModPlayer
     bool _hasJumped;
     int _lastLegFrame;
 
+    static MethodInfo _getPickaxeDamage;
+
     public override void Initialize()
     {
         SetWeightForced(Weight.Base, false);
+        _getPickaxeDamage = Player.GetType().GetMethod
+        (
+            "GetPickaxeDamage",
+            BindingFlags.NonPublic | BindingFlags.Instance,
+            null,
+            [typeof(int), typeof(int), typeof(int), typeof(int), typeof(Tile)],
+            null
+        );
     }
 
     public override void OnEnterWorld()
@@ -466,6 +478,12 @@ public partial class WgPlayer : ModPlayer
             if (volume > 0.01f)
             {
                 SoundEngine.PlaySound(WgSounds.Thump.Build(volume), Player.Center);
+
+                Main.NewText(volume);
+                if (Main.rand.NextDouble()%1 < volume * 3)
+                {
+                    CrackUnderFoot();
+                }
             }
         }
         _lastLegFrame = frame;
@@ -498,6 +516,26 @@ public partial class WgPlayer : ModPlayer
         _ignoreWgBuffTimer = 2;
     }
 
+    void CrackUnderFoot()
+    {
+        //gaurd against future changes of the internal api breaking this code.
+        if (_getPickaxeDamage == null)
+        {
+            return;
+        }
+
+        Vector2 pos = Player.position + Player.velocity;
+        int x = (int)(pos.X + (Player.width / 2f)) / 16;
+        int y = (int)(pos.Y + Player.height + 1f) / 16;
+        Tile tile = Main.tile[x, y];
+        if (tile != null && tile.HasUnactuatedTile)
+        {
+            int tileid = Player.hitTile.HitObject(x, y, 1);
+            int damage = (int)_getPickaxeDamage.Invoke(Main.LocalPlayer, [x, y, 35, tileid, tile]);
+            Player.hitTile.AddDamage(tileid, damage);
+        }
+    }
+
     // Taken from CheckIceBreak() in Player.cs
     /// <summary>
     /// checks for breakable ice tiles below the player and breaks them.
@@ -513,7 +551,8 @@ public partial class WgPlayer : ModPlayer
             for (int y = yStart; y <= yStart + 1 && Main.tile[x, y] != null; y++)
             {
                 Tile tile = Main.tile[x, y];
-                if (tile.HasUnactuatedTile && tile.TileType == TileID.BreakableIce && !WorldGen.SolidTile(x, y - 1))
+
+                if (tile.HasUnactuatedTile && !WorldGen.SolidTile(x, y - 1))
                 {
                     WorldGen.KillTile(x, y);
                     if (Main.netMode == NetmodeID.MultiplayerClient)
