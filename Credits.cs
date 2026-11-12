@@ -52,6 +52,7 @@ public enum Contributor
     alphas0,
     evanescentsummer,
     tamara2401,
+    Chegg,
 
     [Category("Other")]
     purple_circle,

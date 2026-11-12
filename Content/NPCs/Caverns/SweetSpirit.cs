@@ -54,6 +54,7 @@ public class SweetSpirit : ModNPC
         NPC.noTileCollide = true;
         NPC.noGravity = true;
         NPC.friendly = false;
+        NPC.knockBackResist = 0.5f;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

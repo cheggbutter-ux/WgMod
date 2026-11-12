@@ -1327,6 +1327,35 @@ Buffs: {
 		DisplayName: Buff de Diablo Indulgente
 		Description: Mods.WgMod.Buffs.IndulgentImpBuff.Description
 	}
+
+	ManaThickness: {
+		// DisplayName: Mana Thickness
+		/* Description:
+			'''
+			Metabolism slowed from an abundance of magical energy
+			Weight gain rate increased by {0}%
+			''' */
+	}
+
+	SugaryAir: {
+		// DisplayName: Sugary Air
+		// Description: The air tastes sweet
+	}
+
+	SugarySmog: {
+		// DisplayName: Sugary Smog
+		// Description: The air is sickeningly sweet
+	}
+
+	Lipidation: {
+		// DisplayName: Lipidation
+		// Description: The air is thick with grease
+	}
+
+	SmokeyAir: {
+		// DisplayName: Smokey Air
+		// Description: The air is thick with smoke
+	}
 }
 
 Configs: {
@@ -1807,6 +1836,11 @@ Prefixes: {
 		+{2}% posibilidad de golpe critico
 		-{1}% velocidad de ataque
 		'''
+	/* MaxManaTooltip:
+		'''
+		+{0} max mana
+		-{1}% attack speed
+		''' */
 
 	Padded: {
 		DisplayName: Rechoncho
@@ -1822,6 +1856,17 @@ Prefixes: {
 		DisplayName: Rotundo
 		AdditionalTooltip: uwu
 	}
+
+	Abundant: {
+		// AdditionalTooltip: uwu
+		// DisplayName: Abundant
+	}
+
+	// Cursed.DisplayName: Cursed
+	// Ravenous.DisplayName: Ravenous
+	// Titanic.DisplayName: Titanic
+	// Overflowing.DisplayName: Overflowing
+	// CursedTooltip: Damages your waistline
 }
 
 MapObject.DecorativeWeightPotions: Poción de Peso Decorativa

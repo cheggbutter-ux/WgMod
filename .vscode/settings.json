@@ -1,5 +1,5 @@
 {
-    "editor.formatOnSave": true,
-    "files.eol": "\n",
-    "dotnet.defaultSolution": "WgMod.sln"
+  "editor.formatOnSave": false,
+  "files.eol": "\n",
+  "dotnet.defaultSolution": "WgMod.sln"
 }
