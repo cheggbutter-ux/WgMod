@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -12,6 +13,7 @@ using WgMod.Common.Systems;
 using WgMod.Content.Achievements;
 using WgMod.Content.Buffs;
 using WgMod.Content.Buffs.Debuffs;
+using WgMod.Content.Items.Accessories.Fat;
 
 namespace WgMod.Common.Players;
 
@@ -72,12 +74,16 @@ public partial class WgPlayer : ModPlayer
     internal bool _finalWeightFixed;
 
     internal float _buffTotalGain;
-    internal int _iceBreakTimer;
+    internal int _iceBreakTimer = 0;
     internal bool _displayWeight;
 
     internal float _softSquishLeft;
     internal float _softSquishRight;
 
+    readonly int _crackLifeTime = 10;
+    internal Dictionary<int, int> _crackTimers = [];
+
+    internal int _groundedState = 2;
     Vector2 _prevVel;
     float _digestTimer;
     bool _hasJumped;
@@ -312,7 +318,6 @@ public partial class WgPlayer : ModPlayer
     public override void PostUpdateMiscEffects()
     {
         Vector2 acc = Player.velocity - _prevVel;
-        _prevVel = Player.velocity;
         _squishRest = 1f;
 
         int stage = Weight.GetStage();
@@ -335,8 +340,8 @@ public partial class WgPlayer : ModPlayer
         // Ice break
         if (stage >= WeightStage.Heavy)
         {
-            const int iceBreakTime = 60;
-            if (Player.velocity.Y > -0.01f && HasIceBelow())
+            int iceBreakTime = (int)(60f * (1 - Weight.GetClampedFactor(WeightStage.Heavy, WeightStage.SoftImmobile)));
+            if (Math.Abs(Player.velocity.Y) < 0.01f && HasIceBelow())
             {
                 if (_iceBreakTimer == iceBreakTime / 2)
                 {
@@ -353,6 +358,61 @@ public partial class WgPlayer : ModPlayer
                 _iceBreakTimer = 0;
             }
         }
+
+        if (stage >= WeightStage.MorbidlyObese && !Player.mount.Active && Player.TryGetModPlayer(out MeteorCrushPlayer crush) && !crush._crushEffect)
+        {
+            if (Player.CheckForSolidGround())
+            {
+                _groundedState = _groundedState == 0 ? 1 : 2;
+            }
+            else
+            {
+                _groundedState = 0;
+            }
+
+            if (_groundedState == 1)
+            {
+                float strength = Math.Min(_prevVel.Y, 10f) / 10f + (float)Math.Pow(Weight.GetClampedFactor(WeightStage.MorbidlyObese, WeightStage.HardImmobile), 1.5f);
+                if (strength >= 1 && _prevVel.Y >= 1)
+                {
+                    Main.NewText("impact");
+                    SoundEngine.PlaySound(WgSounds.Thump.Build((strength - 1f) * 0.75f + 0.25f), Player.Center);
+                    if (strength >= 1.5)
+                    {
+                        SoundEngine.PlaySound(WgSounds.Stomp.Build((strength - 1.5f)), Player.Center);
+                    }
+
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Dust dust = Dust.NewDustDirect(new Vector2(Player.position.X, Player.position.Y + Player.height), Player.width, 0, DustID.Smoke, 0f, 0f, 0, default, 1f);
+                        dust.velocity.Y = -Math.Abs(dust.velocity.Y);
+                        dust.velocity.Y *= (strength-1f)*0.5f+0.1f;
+                        dust.velocity.X *= strength-0.5f;
+                    }
+
+                    CrackUnderBody(strength * 0.5f);
+                }
+            }
+        }
+
+        foreach ((int id, int value) in _crackTimers)
+        {
+            if (value == 0)
+            {
+                Player.hitTile.AddDamage(id, -1);
+                if (Player.hitTile.data[id].damage == 0)
+                {
+                    _crackTimers.Remove(id);
+
+                }
+            }
+            else
+            {
+                _crackTimers[id]--;
+            }
+        }
+
+        _prevVel = Player.velocity;
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -478,12 +538,7 @@ public partial class WgPlayer : ModPlayer
             if (volume > 0.01f)
             {
                 SoundEngine.PlaySound(WgSounds.Thump.Build(volume), Player.Center);
-
-                Main.NewText(volume);
-                if (Main.rand.NextDouble()%1 < volume * 3)
-                {
-                    CrackUnderFoot();
-                }
+                CrackUnderBody(volume * 2, -1);
             }
         }
         _lastLegFrame = frame;
@@ -516,23 +571,28 @@ public partial class WgPlayer : ModPlayer
         _ignoreWgBuffTimer = 2;
     }
 
-    void CrackUnderFoot()
+    void CrackUnderBody(float chance, int size = 0)
     {
-        //gaurd against future changes of the internal api breaking this code.
         if (_getPickaxeDamage == null)
         {
             return;
         }
 
         Vector2 pos = Player.position + Player.velocity;
-        int x = (int)(pos.X + (Player.width / 2f)) / 16;
+        int x1 = ((int)(pos.X) / 16) - size;
+        int x2 = ((int)(pos.X + Player.width) / 16) + size;
         int y = (int)(pos.Y + Player.height + 1f) / 16;
-        Tile tile = Main.tile[x, y];
-        if (tile != null && tile.HasUnactuatedTile)
+
+        for (int x = x1; x <= x2; x++)
         {
-            int tileid = Player.hitTile.HitObject(x, y, 1);
-            int damage = (int)_getPickaxeDamage.Invoke(Main.LocalPlayer, [x, y, 35, tileid, tile]);
-            Player.hitTile.AddDamage(tileid, damage);
+            Tile tile = Framing.GetTileSafely(x, y);
+            if (tile != null && Main.rand.NextFloat() < chance && tile.HasUnactuatedTile)
+            {
+                int tileid = Player.hitTile.HitObject(x, y, 1);
+                int damage = (int)_getPickaxeDamage.Invoke(Main.LocalPlayer, [x, y, 35, tileid, tile]);
+                Player.hitTile.AddDamage(tileid, damage);
+                _crackTimers[tileid] = _crackLifeTime * 60;
+            }
         }
     }
 
@@ -552,7 +612,7 @@ public partial class WgPlayer : ModPlayer
             {
                 Tile tile = Main.tile[x, y];
 
-                if (tile.HasUnactuatedTile && !WorldGen.SolidTile(x, y - 1))
+                if (tile.HasUnactuatedTile && !WorldGen.SolidTile(x, y - 1) && tile.TileType == TileID.BreakableIce)
                 {
                     WorldGen.KillTile(x, y);
                     if (Main.netMode == NetmodeID.MultiplayerClient)
