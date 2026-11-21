@@ -10,7 +10,8 @@ using Terraria.ModLoader;
 using WgMod.Common.Players;
 
 namespace WgMod.Content.Prefixes;
-public abstract class CursedPrefix : ModPrefix {
+public abstract class CursedPrefix : ModPrefix
+{
     public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
     {
         yield return new TooltipLine(Mod, "Cursed", CursedTooltip.Value)
@@ -34,6 +35,7 @@ public abstract class CursedPrefix : ModPrefix {
 
 }
 
+
 public class CursedGlobalItem : GlobalItem
 {
     public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
@@ -45,7 +47,8 @@ public class CursedGlobalItem : GlobalItem
 
         if (PrefixLoader.GetPrefix(item.prefix) is CursedPrefix && damageDone > 0)
         {
-            wg.AddWeight(new Mass(damageDone));
+            float amt = damageDone / 500f;
+            wg.AddWeight(new Mass(Math.Max(amt, 0.01f)));
         }
 
     }
@@ -84,7 +87,6 @@ public class CursedGlobalProjectile : GlobalProjectile
         if (_isCursed)
         {
             float amt = damageDone / 500f;
-
             wg.AddWeight(new Mass(Math.Max(amt, 0.01f)));
         }
     }

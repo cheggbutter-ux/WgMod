@@ -4,7 +4,6 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -375,7 +374,6 @@ public partial class WgPlayer : ModPlayer
                 float strength = Math.Min(_prevVel.Y, 10f) / 10f + (float)Math.Pow(Weight.GetClampedFactor(WeightStage.MorbidlyObese, WeightStage.HardImmobile), 1.5f);
                 if (strength >= 1 && _prevVel.Y >= 1)
                 {
-                    Main.NewText("impact");
                     SoundEngine.PlaySound(WgSounds.Thump.Build((strength - 1f) * 0.75f + 0.25f), Player.Center);
                     if (strength >= 1.5)
                     {
@@ -395,22 +393,21 @@ public partial class WgPlayer : ModPlayer
             }
         }
 
-        foreach ((int id, int value) in _crackTimers)
-        {
-            if (value == 0)
-            {
-                Player.hitTile.AddDamage(id, -1);
-                if (Player.hitTile.data[id].damage == 0)
-                {
-                    _crackTimers.Remove(id);
-
-                }
-            }
-            else
-            {
-                _crackTimers[id]--;
-            }
-        }
+        //foreach ((int id, int value) in _crackTimers)
+        //{
+        //    if (value == 0)
+        //    {
+        //        Player.hitTile.AddDamage(id, -1);
+        //        if (Player.hitTile.data[id].damage <= 0)
+        //        {
+        //            _crackTimers.Remove(id);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _crackTimers[id]--;
+        //    }
+        //}
 
         _prevVel = Player.velocity;
     }
@@ -591,7 +588,7 @@ public partial class WgPlayer : ModPlayer
                 int tileid = Player.hitTile.HitObject(x, y, 1);
                 int damage = (int)_getPickaxeDamage.Invoke(Main.LocalPlayer, [x, y, 35, tileid, tile]);
                 Player.hitTile.AddDamage(tileid, damage);
-                _crackTimers[tileid] = _crackLifeTime * 60;
+                //_crackTimers[tileid] = _crackLifeTime * 60;
             }
         }
     }
