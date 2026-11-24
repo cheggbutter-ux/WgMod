@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -57,6 +58,9 @@ public partial class BuffHitPlayer : ModPlayer
 
         if (npc.type == NPCID.HallowBoss && hurtInfo.Damage < 1250)
             AddBuff(_empressBuff, 4 * hurtInfo.Damage, hurtInfo.Damage / 6, 1);
+
+        if (_mushrooms.Contains(npc.type))
+            AddBuff(_mushroomBuff, 1200 + hurtInfo.Damage * 20, 0, 1);
     }
 
     public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)

@@ -13,6 +13,7 @@ using WgMod.Content.Achievements;
 using WgMod.Content.Buffs;
 using WgMod.Content.Buffs.Debuffs;
 using WgMod.Content.Items.Accessories.Fat;
+using WgMod.Content.Items.Curses;
 
 namespace WgMod.Common.Players;
 
@@ -141,6 +142,11 @@ public partial class WgPlayer : ModPlayer
         Weight start = Weight;
         if (mass > 0f)
             mass = WeightGainRate.ApplyTo(mass);
+        else if (mass < 0f)
+        {
+            if (Player.Curses().ActiveCurses[(int)CurseIDs.RockBottom])
+                return 0f;
+        }
         SetWeight(Weight + mass, effects);
         return Weight.Mass - start.Mass;
     }
@@ -236,7 +242,7 @@ public partial class WgPlayer : ModPlayer
     {
         EnsureBuff<FatBuff>();
         EnsureBuff<StomachBuff>();
-        if (Weight.GetStage() >= Tired.StartStage)
+        if (!WgServerConfig.Instance.DisableFatBuffs && Weight.GetStage() >= Tired.StartStage)
             Player.AddBuff(ModContent.BuffType<Tired>(), 2);
         if (Stomach > 0f && (Player.HasBuff(BuffID.NeutralHunger) || Player.HasBuff(BuffID.Hunger) || Player.HasBuff(BuffID.Starving)))
         {
@@ -641,10 +647,11 @@ public partial class WgPlayer : ModPlayer
         return false;
     }
 
-    //public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
-    //{
-    //    SetWeight(new Weight(Weight.Mass));
-    //}
+    public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+    {
+        if (!Player.Curses().ActiveCurses[(int)CurseIDs.RockBottom])
+            SetWeight(new Weight(Weight.Mass * WeightValues.GetDeathPenalty(Player.difficulty)));
+    }
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers)
     {
