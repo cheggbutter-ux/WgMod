@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -80,7 +81,6 @@ public partial class WgPlayer : ModPlayer
     internal float _softSquishLeft;
     internal float _softSquishRight;
 
-    readonly int _crackLifeTime = 10;
     internal Dictionary<int, int> _crackTimers = [];
 
     internal int _groundedState = 2;

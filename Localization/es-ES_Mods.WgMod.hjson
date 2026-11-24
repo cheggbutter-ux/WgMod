@@ -1447,23 +1447,6 @@ Buffs: {
 		Description: Mods.WgMod.Buffs.IndulgentImpBuff.Description
 	}
 
-	Stamina: {
-		// DisplayName: Stamina
-		// AltDisplayName: Stamina (or lack thereof)
-		// Description: Reduces movement penalty by {0}%
-		// AltDescription: Increases movement penalty by {0}%
-	}
-
-	Spored: {
-		// DisplayName: Spored
-		/* Description:
-			'''
-			'You think you might be gaining weight...'
-			'But it could just be your imagination.'
-			''' */
-	}
-}
-
 	ManaThickness: {
 		// DisplayName: Mana Thickness
 		/* Description:
@@ -1491,6 +1474,22 @@ Buffs: {
 	SmokeyAir: {
 		// DisplayName: Smokey Air
 		// Description: The air is thick with smoke
+	}
+
+	Stamina: {
+		// DisplayName: Stamina
+		// AltDisplayName: Stamina (or lack thereof)
+		// Description: Reduces movement penalty by {0}%
+		// AltDescription: Increases movement penalty by {0}%
+	}
+
+	Spored: {
+		// DisplayName: Spored
+		/* Description:
+			'''
+			'You think you might be gaining weight...'
+			'But it could just be your imagination.'
+			''' */
 	}
 }
 
